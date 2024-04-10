@@ -128,8 +128,18 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     {
         $repository = $this->get('models')->getRepository(Tax::class);
 
+        $filter = (array) $this->request->get('filter', []);
+        $query = $this->Request()->getParam('query');
+        if ($query !== '') {
+            $filter[] = [
+                'property' => 'tax.name',
+                'value' => '%' . $query . '%',
+                'expression' => 'LIKE',
+            ];
+        }
+
         $query = $repository->getTaxQuery(
-            $this->Request()->getParam('filter', []),
+            $filter,
             $this->Request()->getParam('sort', []),
             $this->Request()->getParam('start'),
             $this->Request()->getParam('limit')
@@ -167,6 +177,15 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $filter[] = [
                 'property' => 'active',
                 'value' => true,
+            ];
+        }
+
+        $searchQuery = $this->Request()->getParam('query');
+        if ($searchQuery !== '') {
+            $filter[] = [
+                'property' => 'p.description',
+                'value' => '%' . $searchQuery . '%',
+                'expression' => 'LIKE',
             ];
         }
 

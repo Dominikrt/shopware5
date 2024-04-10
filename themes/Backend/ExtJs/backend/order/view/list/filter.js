@@ -248,6 +248,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             name: 'orders.paymentId',
             pageSize: 7,
             queryMode: 'remote',
+            minChars: 2,
             store: Ext.create('Shopware.store.Payment', {
                 pageSize: 7,
                 filters: [{
